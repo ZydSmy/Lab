@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Blood Lab - Test Types</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { display: flex; background: #f4f7f6; min-height: 100vh; font-family: 'Segoe UI', sans-serif; }
+        .sidebar { width: 260px; background: #2c3e50; color: white; position: fixed; height: 100%; }
+        .sidebar a { color: #adb5bd; padding: 15px 25px; display: block; text-decoration: none; border-left: 4px solid transparent; }
+        .sidebar a:hover, .sidebar a.active { background: #34495e; color: white; border-left: 4px solid #3498db; }
+        .main-content { margin-left: 260px; width: 100%; padding: 40px; }
+        .card { border: none; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <div class="text-center py-5"><h4 class="text-white fw-bold"><i class="fas fa-droplet text-danger me-2"></i>LAB SYS</h4></div>
+    <a href="/results"><i class="fas fa-file-medical me-2"></i> Lab Results</a>
+    <a href="/patients"><i class="fas fa-users me-2"></i> Patients</a>
+    <a href="/doctors"><i class="fas fa-user-md me-2"></i> Doctors List</a>
+    <a href="/test-types" class="active"><i class="fas fa-microscope me-2"></i> Test Types</a>
+</div>
+
+<div class="main-content">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold">Test Categories & Ranges</h2>
+        <button class="btn btn-info text-white btn-lg rounded-pill" data-bs-toggle="modal" data-bs-target="#addTestModal">
+            <i class="fas fa-flask me-2"></i>Define New Test
+        </button>
+    </div>
+
+    <div class="card overflow-hidden">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th class="ps-4">Test Name</th>
+                        <th>Min Reference</th>
+                        <th>Max Reference</th>
+                        <th>Unit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% tests.forEach(t => { %>
+                    <tr class="align-middle">
+                        <td class="ps-4"><span class="fw-bold text-uppercase"><%= t.testName %></span></td>
+                        <td class="text-success fw-bold"><%= t.minValue %></td>
+                        <td class="text-danger fw-bold"><%= t.maxValue %></td>
+                        <td><span class="badge bg-light text-dark border"><%= t.unit %></span></td>
+                    </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="addTestModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <form action="/test-types/add" method="POST" class="modal-content border-0 shadow-lg">
+            <div class="modal-header bg-info text-white border-0"><h5>New Test Definition</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
+            <div class="modal-body p-4">
+                <div class="mb-3"><label class="form-label fw-bold">Test Name</label><input type="text" name="testName" class="form-control" placeholder="e.g. HEMOGLOBIN" required></div>
+                <div class="row">
+                    <div class="col-md-6 mb-3"><label class="form-label fw-bold">Min Value</label><input type="number" step="0.1" name="minValue" class="form-control" required></div>
+                    <div class="col-md-6 mb-3"><label class="form-label fw-bold">Max Value</label><input type="number" step="0.1" name="maxValue" class="form-control" required></div>
+                </div>
+                <div class="mb-3"><label class="form-label fw-bold">Measurement Unit</label><input type="text" name="unit" class="form-control" placeholder="e.g. g/dL" required></div>
+            </div>
+            <div class="modal-footer border-0 p-4 pt-0"><button type="submit" class="btn btn-info text-white w-100 py-2 fw-bold">Create Test Category</button></div>
+        </form>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

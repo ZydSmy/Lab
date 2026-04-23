@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Blood Lab - Patients</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { display: flex; background: #f4f7f6; min-height: 100vh; font-family: 'Segoe UI', sans-serif; }
+        .sidebar { width: 260px; background: #2c3e50; color: white; position: fixed; height: 100%; }
+        .sidebar a { color: #adb5bd; padding: 15px 25px; display: block; text-decoration: none; border-left: 4px solid transparent; }
+        .sidebar a:hover, .sidebar a.active { background: #34495e; color: white; border-left: 4px solid #3498db; }
+        .main-content { margin-left: 260px; width: 100%; padding: 40px; }
+        .card { border: none; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <div class="text-center py-5"><h4 class="text-white fw-bold"><i class="fas fa-droplet text-danger me-2"></i>LAB SYS</h4></div>
+    <a href="/results"><i class="fas fa-file-medical me-2"></i> Lab Results</a>
+    <a href="/patients" class="active"><i class="fas fa-users me-2"></i> Patients</a>
+    <a href="/doctors"><i class="fas fa-user-md me-2"></i> Doctors List</a>
+    <a href="/test-types"><i class="fas fa-microscope me-2"></i> Test Types</a>
+</div>
+
+<div class="main-content">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold">Patients Registry</h2>
+        <button class="btn btn-primary btn-lg rounded-pill" data-bs-toggle="modal" data-bs-target="#addPatientModal">
+            <i class="fas fa-user-plus me-2"></i>Register Patient
+        </button>
+    </div>
+
+    <div class="card overflow-hidden">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <!-- داخل جدول المرضى في صفحة patients.ejs -->
+<thead class="table-light">
+    <tr>
+        <th class="ps-4">Full Name</th>
+        <th>Age</th>
+        <th>Gender</th>
+        <th>Phone Number</th>
+        <th>Actions</th> <!-- عمود جديد -->
+    </tr>
+</thead>
+<tbody>
+    <% patients.forEach(p => { %>
+    <tr class="align-middle">
+        <td class="ps-4"><strong><%= p.name %></strong></td>
+        <td><%= p.age %> Yrs</td>
+        <td><span class="badge bg-secondary-subtle text-secondary text-uppercase"><%= p.gender %></span></td>
+        <td><%= p.phone %></td>
+        <td>
+            <!-- رابط لفتح صفحة التاريخ الخاصة بهذا المريض -->
+            <a href="/patients/<%= p._id %>/history" class="btn btn-sm btn-outline-primary rounded-pill">
+                <i class="fas fa-history me-1"></i> View History
+            </a>
+        </td>
+    </tr>
+    <% }) %>
+</tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="addPatientModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <form action="/patients/add" method="POST" class="modal-content border-0 shadow-lg">
+            <div class="modal-header bg-primary text-white border-0"><h5>Register New Patient</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
+            <div class="modal-body p-4">
+                <div class="mb-3"><label class="form-label fw-bold">Patient Name</label><input type="text" name="name" class="form-control" placeholder="Full Name" required></div>
+                <div class="row">
+                    <div class="col-md-6 mb-3"><label class="form-label fw-bold">Age</label><input type="number" name="age" class="form-control" placeholder="Age"></div>
+                    <div class="col-md-6 mb-3"><label class="form-label fw-bold">Gender</label><select name="gender" class="form-select"><option value="male">Male</option><option value="female">Female</option></select></div>
+                </div>
+                <div class="mb-3"><label class="form-label fw-bold">Phone Number</label><input type="text" name="phone" class="form-control" placeholder="01xxxxxxxxx"></div>
+            </div>
+            <div class="modal-footer border-0 p-4 pt-0"><button type="submit" class="btn btn-primary w-100 py-2 fw-bold">Save Patient</button></div>
+        </form>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
